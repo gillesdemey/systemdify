@@ -57,3 +57,14 @@ Examples
   ...
 ```
 
+## NPM Hooks
+
+The recommended way to use to module is to add it to your dev dependencies and execute the package after you've done an NPM install.
+
+```json
+...
+scripts: {
+  'install': 'sudo ./node_modules/.bin/systemdify'
+}
+...
+```
