@@ -23,6 +23,7 @@ After=network.target
 Type=simple
 ExecStart=${command}
 Restart=always
+Environment=NODE_ENV=production
 
 [Install]
 WantedBy=multi-user.target
