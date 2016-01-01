@@ -2,6 +2,14 @@
 
 > Automatically create a systemd unit file for your Node application based on package.json
 
+## Install
+
+`npm install --save systemdify`
+
+or to use the CLI
+
+`npm install -g systemdify`
+
 ## Node API
 
 ```javascript
