@@ -49,7 +49,8 @@ Options
   -o, --output Write output to file
 
 Examples
-  $ systemdify /path/to/my/app
+  $ systemdify /path/to/my/app -o my-app.service
+  $ cat my-app.service
 
   [Unit]
   description=My Application
