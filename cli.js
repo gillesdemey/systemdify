@@ -1,7 +1,9 @@
 #!/usr/bin/env node
+
 var fs = require('fs')
 var resolve = require('path').resolve
 var meow = require('meow')
+var log = require('npmlog')
 
 var initdify = require('./')
 
@@ -43,6 +45,15 @@ var file = initdify({
 
 if (cli.flags.output) {
   fs.writeFileSync(cli.flags.output, file)
-} else {
-  fs.writeFileSync(`/etc/systemd/system/${pjson.name}.service`, file)
+  process.exit(0)
 }
+
+fs.writeFile(`/etc/systemd/system/${pjson.name}.service`, file, function (err) {
+  switch (err.code) {
+    case 'ENOENT':
+      log.warn(`systemdify@${cli.pkg.version}`, 'systemd not found, skipping')
+      break
+    default:
+      throw err
+  }
+})
