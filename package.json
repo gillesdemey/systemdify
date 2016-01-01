@@ -1,15 +1,16 @@
 {
   "name": "systemdify",
   "version": "0.1.0",
-  "description": "",
+  "description": "Automatically create a systemd unit file for your Node application",
   "main": "index.js",
   "bin": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Gilles De Mey <gilles.de.mey@gmail.com>",
+  "repository": "gillesdemey/systemdify",
+  "license": "MIT",
   "devDependencies": {
     "tape": "^4.4.0"
   },
