@@ -1,0 +1,19 @@
+{
+  "name": "systemdify",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tape": "^4.4.0"
+  },
+  "dependencies": {
+    "which": "^1.2.1"
+  }
+}
