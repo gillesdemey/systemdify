@@ -26,7 +26,14 @@ var cli = meow(`
 })
 
 var folder = cli.input[0] || process.cwd()
-var pjson = require(resolve(folder, 'package.json'))
+var pjson
+
+try {
+  pjson = require(resolve(folder, 'package.json'))
+} catch (_) {
+  console.error('No package.json found!')
+  process.exit(1)
+}
 
 var file = initdify({
   name: pjson.name,
@@ -35,8 +42,10 @@ var file = initdify({
 })
 
 if (cli.flags.output) {
-  fs.writeFileSync(resolve('./', cli.flags.output), file)
+  fs.writeFileSync(cli.flags.output, file)
   process.exit(0)
+} else {
+  fs.writeFileSync(`/etc/systemd/system/${pjson.name}.service`)
 }
 
 console.log(file)
