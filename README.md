@@ -64,7 +64,7 @@ The recommended way to use to module is to add it to your dev dependencies and e
 ```json
 ...
 scripts: {
-  'install': 'sudo ./node_modules/.bin/systemdify'
+  "install": "sudo ./node_modules/.bin/systemdify"
 }
 ...
 ```
