@@ -43,9 +43,6 @@ var file = initdify({
 
 if (cli.flags.output) {
   fs.writeFileSync(cli.flags.output, file)
-  process.exit(0)
 } else {
   fs.writeFileSync(`/etc/systemd/system/${pjson.name}.service`)
 }
-
-console.log(file)
