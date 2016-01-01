@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": "cli.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
   "keywords": [],
   "author": "Gilles De Mey <gilles.de.mey@gmail.com>",
