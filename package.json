@@ -4,10 +4,19 @@
   "description": "Automatically create a systemd unit file for your Node application",
   "main": "index.js",
   "bin": "cli.js",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "scripts": {
     "test": "node test.js"
   },
-  "keywords": [],
+  "keywords": [
+    "systemd",
+    "daemon",
+    "forever",
+    "restart",
+    "linux"
+  ],
   "author": "Gilles De Mey <gilles.de.mey@gmail.com>",
   "repository": "gillesdemey/systemdify",
   "license": "MIT",
