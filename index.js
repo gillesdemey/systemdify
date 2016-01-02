@@ -1,4 +1,6 @@
+var log = require('npmlog')
 var path = require('path')
+var pjson = require('./package.json')
 var which = require('which')
 
 module.exports = function (opts) {
@@ -10,7 +12,7 @@ module.exports = function (opts) {
     var node = which.sync('node')
     command = `${node} ${path.resolve(command)}`
   } catch (_) {
-    console.error('Node is not installed! Aborting.')
+    log.error(`${pjson.name}@${pjson.version}`, 'Node is not installed! Aborting')
     process.exit(1)
   }
 

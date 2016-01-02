@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 var fs = require('fs')
-var resolve = require('path').resolve
-var meow = require('meow')
 var log = require('npmlog')
+var meow = require('meow')
+var resolve = require('path').resolve
 
 var initdify = require('./')
 
@@ -29,11 +29,12 @@ var cli = meow(`
 
 var folder = cli.input[0] || process.cwd()
 var pjson
+var prefix = `${cli.pkg.name}@${cli.pkg.version}`
 
 try {
   pjson = require(resolve(folder, 'package.json'))
 } catch (_) {
-  console.error('No package.json found!')
+  log.error(prefix, 'No package.json found!')
   process.exit(1)
 }
 
@@ -51,7 +52,7 @@ if (cli.flags.output) {
 fs.writeFile(`/etc/systemd/system/${pjson.name}.service`, file, function (err) {
   switch (err.code) {
     case 'ENOENT':
-      log.warn(`systemdify@${cli.pkg.version}`, 'systemd not found, skipping')
+      log.warn(prefix, 'systemd not found, skipping')
       break
     default:
       throw err
