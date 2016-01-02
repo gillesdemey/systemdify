@@ -1,5 +1,5 @@
 var test = require('tape')
-var initdify = require('./')
+var initdify = require('../')
 
 test('create a correct Unit file', function (t) {
   t.plan(1)

@@ -1,0 +1,15 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "My awesome application",
+  "main": "server.js",
+  "scripts": {
+    "install": "sudo ./node_modules/.bin/systemdify"
+  },
+  "keywords": [],
+  "author": "Gilles De Mey <gilles.de.mey@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "systemdify": "^0.1.3"
+  }
+}
