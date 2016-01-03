@@ -1,6 +1,6 @@
 {
   "name": "systemdify",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Automatically create a systemd unit file for your Node application",
   "main": "index.js",
   "bin": "cli.js",
