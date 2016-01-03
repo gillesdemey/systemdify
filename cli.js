@@ -4,6 +4,7 @@ var fs = require('fs')
 var log = require('npmlog')
 var meow = require('meow')
 var resolve = require('path').resolve
+var which = require('which')
 
 var initdify = require('./')
 
@@ -29,6 +30,7 @@ var cli = meow(`
 
 var folder = cli.input[0] || process.cwd()
 var pjson
+var command
 var prefix = `${cli.pkg.name}@${cli.pkg.version}`
 
 try {
@@ -38,9 +40,25 @@ try {
   process.exit(1)
 }
 
+if (pjson.scripts && pjson.scripts.start) {
+  command = pjson.scripts.start
+} else if (pjson.main) {
+  try {
+    var node = which.sync('node')
+    command = `${node} ${pjson.main}`
+  } catch (_) {
+    log.error(`${pjson.name}@${pjson.version}`, 'Node is not installed! Aborting')
+    process.exit(1)
+  }
+} else {
+  log.error(`${pjson.name}@${pjson.version}`, 'No valid command found! Aborting')
+  process.exit(1)
+}
+
 var file = initdify({
   name: pjson.name,
-  command: resolve(folder, pjson.main),
+  command: command,
+  cwd: resolve(folder),
   description: pjson.description
 })
 
