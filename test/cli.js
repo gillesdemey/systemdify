@@ -43,8 +43,9 @@ test('Command line: without input with flags', function (t) {
     t.ok(fs.existsSync(daemon))
 
     var file = fs.readFileSync(daemon, { encoding: 'utf-8' })
+    t.ok(file.match(`WorkingDirectory=${process.cwd()}\n`))
     t.ok(file.match(`Description=${pjson.description}\n`))
-    t.ok(file.match(`ExecStart=(.+)${path.resolve(pjson.main)}\n`))
+    t.ok(file.match(`ExecStart=(.+)${pjson.main}\n`))
 
     fs.unlinkSync(daemon)
     t.end()
@@ -69,9 +70,9 @@ test('Command line: input with flags', function (t) {
     t.ok(fs.existsSync(daemon))
 
     var file = fs.readFileSync(path.resolve(daemon), { encoding: 'utf-8' })
+    t.ok(file.match(`WorkingDirectory=${path.resolve('test/fixtures')}\n`))
     t.ok(file.match(`Description=${fixture.description}\n`))
-    var mainPath = path.resolve('test', 'fixtures', fixture.main)
-    t.ok(file.match(`ExecStart=(.+)${mainPath}\n`))
+    t.ok(file.match(`ExecStart=(.+)${fixture.main}\n`))
 
     fs.unlinkSync(daemon)
     t.end()
