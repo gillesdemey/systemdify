@@ -11,8 +11,11 @@ test('Command line: version', function (t) {
   t.plan(2)
 
   cp.exec(CMD + ' --version', function (err, stdout) {
-    t.error(err)
-    t.ok(stdout.toLowerCase().indexOf(pjson.version) !== -1)
+    t.error(err, 'should not error')
+    t.ok(
+      stdout.toLowerCase().indexOf(pjson.version) !== -1,
+      'has correct version'
+    )
   })
 })
 
@@ -20,8 +23,8 @@ test('Command line: help', function (t) {
   t.plan(2)
 
   cp.exec(CMD + ' --help', function (err, stdout) {
-    t.error(err)
-    t.ok(stdout.toLowerCase().indexOf('usage') !== -1)
+    t.error(err, 'should not error')
+    t.ok(stdout.toLowerCase().indexOf('usage') !== -1, 'has help output')
   })
 })
 
@@ -30,8 +33,8 @@ test('Command line: without input', function (t) {
 
   cp.exec(CMD, function (err, stdout, stderr) {
     // on machines without systemd, a warning will be logged to stderr
-    t.error(err)
-    t.ok(stderr.indexOf('WARN') !== -1)
+    t.error(err, 'should not error')
+    t.ok(stderr.indexOf('WARN') !== -1, 'should warn if not installed')
   })
 })
 
@@ -39,13 +42,22 @@ test('Command line: without input with flags', function (t) {
   var daemon = 'test.service'
 
   cp.exec(CMD + ` --output ${daemon}`, function (err, stdout) {
-    t.error(err)
-    t.ok(fs.existsSync(daemon))
+    t.error(err, 'should not error')
+    t.ok(fs.existsSync(daemon), 'service created')
 
     var file = fs.readFileSync(daemon, { encoding: 'utf-8' })
-    t.ok(file.match(`WorkingDirectory=${process.cwd()}\n`))
-    t.ok(file.match(`Description=${pjson.description}\n`))
-    t.ok(file.match(`ExecStart=(.+)${pjson.main}\n`))
+    t.ok(
+      file.match(`WorkingDirectory=${process.cwd()}\n`),
+      'has correct WorkingDir'
+    )
+    t.ok(
+      file.match(`Description=${pjson.description}\n`),
+      'has correct description'
+    )
+    t.ok(
+      file.match(`ExecStart=(.+)${pjson.main}\n`),
+      'has correct command'
+    )
 
     fs.unlinkSync(daemon)
     t.end()
@@ -56,8 +68,8 @@ test('Command line: input without flags', function (t) {
   t.plan(2)
 
   cp.exec(CMD + ` test/fixtures`, function (err, stdout, stderr) {
-    t.error(err)
-    t.ok(stderr.indexOf('WARN') !== -1)
+    t.error(err, 'should not error')
+    t.ok(stderr.indexOf('WARN') !== -1, 'should warn if not installed')
   })
 })
 
@@ -66,13 +78,22 @@ test('Command line: input with flags', function (t) {
   var fixture = require('./fixtures/package.json')
 
   cp.exec(CMD + ` test/fixtures --output ${daemon}`, function (err, stdout) {
-    t.error(err)
-    t.ok(fs.existsSync(daemon))
+    t.error(err, 'should not error')
+    t.ok(fs.existsSync(daemon), 'service created')
 
     var file = fs.readFileSync(path.resolve(daemon), { encoding: 'utf-8' })
-    t.ok(file.match(`WorkingDirectory=${path.resolve('test/fixtures')}\n`))
-    t.ok(file.match(`Description=${fixture.description}\n`))
-    t.ok(file.match(`ExecStart=(.+)${fixture.main}\n`))
+    t.ok(
+      file.match(`WorkingDirectory=${path.resolve('test/fixtures')}\n`),
+      'has correct WorkingDir'
+    )
+    t.ok(
+      file.match(`Description=${fixture.description}\n`),
+      'has correct description'
+    )
+    t.ok(
+      file.match(`ExecStart=(.+)${fixture.main}\n`),
+      'has correct command'
+    )
 
     fs.unlinkSync(daemon)
     t.end()
@@ -82,6 +103,9 @@ test('Command line: input with flags', function (t) {
 test('Command line: fail when no package json is found', function (t) {
   cp.exec(CMD + ` doesnotexist`, function (err, stdout) {
     t.plan(1)
-    t.ok(err.toString().match('No package.json found!'))
+    t.ok(
+      err.toString().match('No package.json found!'),
+      'should fail without package.json'
+    )
   })
 })
