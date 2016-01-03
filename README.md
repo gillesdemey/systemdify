@@ -17,7 +17,8 @@ var systemdify = require('systemdify')
 
 var file = initdify({
 	command: 'node ./server.js',
-	description: 'My Awesome Application'
+	description: 'My Awesome Application',
+	cwd: '/path/to/my-app/'
 })
 
 ```
@@ -31,15 +32,24 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/node /path/to/my/app/server.js
+ExecStart=node ./server.js
 Restart=always
 Environment=NODE_ENV=production
+WorkingDirectory=/path/to/my-app
 
 [Install]
 WantedBy=multi-user.target
 ```
 
 ## CLI
+
+Systemdify will figure out what to do automatically, so you don't have to.
+
+Simply execute systemdify and it will generate a unit file for you based on your package.json file. It will place your unit file under `/etc/systemd/system/<package.name>.service` by default. 
+
+Systemdify will try to use your `npm start` script and fall back to executing your `main` entry if you don't have one.
+
+Systemdify will always exit cleanly when it issues a warning, but will fail if node is not installed on the system.
 
 ```
 Usage
@@ -65,6 +75,9 @@ The recommended way to use to module is to add it to your dev dependencies and e
 ...
 scripts: {
   "install": "sudo ./node_modules/.bin/systemdify"
+},
+devDepencencies: {
+  "systemdify": "^0.2.0"
 }
 ...
 ```
