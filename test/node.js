@@ -1,18 +1,25 @@
 var test = require('tape')
 var initdify = require('../')
 
-test('create a correct Unit file', function (t) {
-  t.plan(1)
+test('Node: create a correct Unit file', function (t) {
+  var cmd = 'node ./bin/www'
+  var description = 'My App'
+  var project = '/foo/bar'
 
   var file = initdify({
-    command: 'node ./server.js',
-    description: 'My App'
+    command: cmd,
+    description: description,
+    cwd: project
   })
 
   t.ok(file, 'returns unit file')
+  t.ok(file.match(`Description=${description}\n`), 'has correct description')
+  t.ok(file.match(`WorkingDirectory=${project}\n`), 'has correct working dir')
+  t.ok(file.match(`ExecStart=${cmd}\n`), 'has correct command')
+  t.end()
 })
 
-test('create a correct Unit file without options', function (t) {
+test('Node: create a correct Unit file without options', function (t) {
   var file = initdify()
 
   t.ok(file, 'returns unit file')
