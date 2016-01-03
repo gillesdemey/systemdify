@@ -1,17 +1,22 @@
+var xtend = require('xtend')
+
 module.exports = function (opts) {
-  var description = opts.description
-  var command = opts.command
-  var cwd = opts.cwd
+  var defaults = {
+    command: 'npm start',
+    cwd: process.cwd(),
+    description: ''
+  }
+  opts = xtend(defaults, opts || {})
 
   return `
 [Unit]
-Description=${description}
+Description=${opts.description}
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=${cwd}
-ExecStart=${command}
+WorkingDirectory=${opts.cwd}
+ExecStart=${opts.command}
 Restart=always
 Environment=NODE_ENV=production
 

@@ -16,7 +16,7 @@ or to use the CLI
 var systemdify = require('systemdify')
 
 var file = initdify({
-	command: './server.js',
+	command: 'node ./server.js',
 	description: 'My Awesome Application'
 })
 
