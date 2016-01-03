@@ -40,6 +40,11 @@ try {
   process.exit(1)
 }
 
+if (!pjson.main && (!pjson.scripts || !pjson.scripts.start)) {
+  log.error(prefix, 'No valid command found! Skipping')
+  process.exit(0)
+}
+
 if (pjson.scripts && pjson.scripts.start) {
   command = pjson.scripts.start
 } else if (pjson.main) {
@@ -47,12 +52,9 @@ if (pjson.scripts && pjson.scripts.start) {
     var node = which.sync('node')
     command = `${node} ${pjson.main}`
   } catch (_) {
-    log.error(`${pjson.name}@${pjson.version}`, 'Node is not installed! Aborting')
+    log.error(prefix, 'Node is not installed! Aborting')
     process.exit(1)
   }
-} else {
-  log.error(`${pjson.name}@${pjson.version}`, 'No valid command found! Aborting')
-  process.exit(1)
 }
 
 var file = initdify({

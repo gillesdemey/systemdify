@@ -28,6 +28,15 @@ test('Command line: help', function (t) {
   })
 })
 
+test('Command line: no valid command', function (t) {
+  t.plan(2)
+
+  cp.exec(CMD, function (err, stdout, stderr) {
+    t.error(err, 'should not error')
+    t.ok(stderr.indexOf('WARN') !== -1, 'should warn if no command is found')
+  })
+})
+
 test('Command line: without input', function (t) {
   t.plan(2)
 
@@ -35,6 +44,34 @@ test('Command line: without input', function (t) {
     // on machines without systemd, a warning will be logged to stderr
     t.error(err, 'should not error')
     t.ok(stderr.indexOf('WARN') !== -1, 'should warn if not installed')
+  })
+})
+
+test('Command line: with input with flags start script', function (t) {
+  var daemon = 'test.service'
+  var project = 'test/fixtures/my-app'
+  var fixture = require('./fixtures/my-app/package.json')
+
+  cp.exec(CMD + ` ${project} --output ${daemon}`, function (err, stdout) {
+    t.error(err, 'should not error')
+    t.ok(fs.existsSync(daemon), 'service created')
+
+    var file = fs.readFileSync(path.resolve(daemon), { encoding: 'utf-8' })
+    t.ok(
+      file.match(`WorkingDirectory=${path.resolve(project)}\n`),
+      'has correct WorkingDir'
+    )
+    t.ok(
+      file.match(`Description=${fixture.description}\n`),
+      'has correct description'
+    )
+    t.ok(
+      file.match(`ExecStart=${fixture.scripts.start}\n`),
+      'has correct command'
+    )
+
+    fs.unlinkSync(daemon)
+    t.end()
   })
 })
 
@@ -67,7 +104,7 @@ test('Command line: without input with flags', function (t) {
 test('Command line: input without flags', function (t) {
   t.plan(2)
 
-  cp.exec(CMD + ` test/fixtures`, function (err, stdout, stderr) {
+  cp.exec(CMD + ` test/fixtures/my-other-app`, function (err, stdout, stderr) {
     t.error(err, 'should not error')
     t.ok(stderr.indexOf('WARN') !== -1, 'should warn if not installed')
   })
@@ -75,15 +112,16 @@ test('Command line: input without flags', function (t) {
 
 test('Command line: input with flags', function (t) {
   var daemon = 'test.service'
-  var fixture = require('./fixtures/package.json')
+  var project = 'test/fixtures/my-other-app'
+  var fixture = require('./fixtures/my-other-app/package.json')
 
-  cp.exec(CMD + ` test/fixtures --output ${daemon}`, function (err, stdout) {
+  cp.exec(CMD + ` ${project} --output ${daemon}`, function (err, stdout) {
     t.error(err, 'should not error')
     t.ok(fs.existsSync(daemon), 'service created')
 
     var file = fs.readFileSync(path.resolve(daemon), { encoding: 'utf-8' })
     t.ok(
-      file.match(`WorkingDirectory=${path.resolve('test/fixtures')}\n`),
+      file.match(`WorkingDirectory=${path.resolve(project)}\n`),
       'has correct WorkingDir'
     )
     t.ok(
